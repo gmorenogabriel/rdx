@@ -1,0 +1,39 @@
+<?php namespace App\Database\Seeds;
+/*
+   Tomado de Faker Generator
+   luego en la linea de comando:
+   php spark migrate:create CountriesSeeder
+*/
+
+use CodeIgniter\Database\Seeder;
+use Faker\Factory;
+
+class SeederCountries extends Seeder
+{
+    public function run()
+    {
+        $faker = Factory::create();
+        $countries = [];
+        $group     = [];
+
+        for($i =0; $i <14; $i++){
+            
+            $created_at = $faker->dateTime();
+            $update_at  = $faker->dateTimeBetween($created_at);
+
+            $countries[] = [
+                 'nombre' => $faker->country,
+                 'fecha_alta' => $created_at->format('Y-m-d H:i:s'), //$faker->dateTime(),
+                 'fecha_edit' => $update_at->format('Y-m-d H:i:s'), //$faker->dateTime(),
+            ];
+        }
+        // Insertamos en la BDatos
+        $builder = $this->db->table('paises');
+        $builder->insertBatch($countries);
+    }
+    /*
+     Una vez finalizado para subir los datos a la Base
+     se debe ejecutar:
+     php spark db:seed CountriesSeeder
+    */
+}
